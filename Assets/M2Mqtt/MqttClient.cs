@@ -30,6 +30,7 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 using uPLibrary.Networking.M2Mqtt.Session;
 using uPLibrary.Networking.M2Mqtt.Utility;
 using uPLibrary.Networking.M2Mqtt.Internal;
+
 // if .Net Micro Framework
 #if (MF_FRAMEWORK_VERSION_V4_2 || MF_FRAMEWORK_VERSION_V4_3)
 using Microsoft.SPOT;
@@ -56,6 +57,7 @@ using System.Collections;
 using MqttUtility = uPLibrary.Networking.M2Mqtt.Utility;
 using System.IO;
 using System.Net.Security;
+using UnityEngine;
 
 namespace uPLibrary.Networking.M2Mqtt
 {
@@ -690,6 +692,7 @@ namespace uPLibrary.Networking.M2Mqtt
             try
             {
                 // broker must send PINGRESP within timeout equal to keep alive period
+                Debug.Log("Got Ping");
                 return (MqttMsgPingResp)this.SendReceive(pingreq, this.keepAlivePeriod);
             }
             catch (Exception e)
@@ -1006,6 +1009,7 @@ namespace uPLibrary.Networking.M2Mqtt
             {
                 // send message
                 this.channel.Send(msgBytes);
+                Debug.Log("sent " + msgBytes.Length + " " + msgBytes.ToString());
 
 #if !BROKER
                 // update last message sent ticks
@@ -1363,7 +1367,7 @@ namespace uPLibrary.Networking.M2Mqtt
 
                         // extract message type from received byte
                         msgType = (byte)((fixedHeaderFirstByte[0] & MqttMsgBase.MSG_TYPE_MASK) >> MqttMsgBase.MSG_TYPE_OFFSET);
-
+                        Debug.Log("Got msgType=" + msgType);
                         switch (msgType)
                         {
                             // CONNECT message received
@@ -1594,7 +1598,8 @@ namespace uPLibrary.Networking.M2Mqtt
                     else
                     {
                         // wake up thread that will notify connection is closing
-                        this.OnConnectionClosing();
+                        //JXL Edit
+                        //this.OnConnectionClosing();
                     }
                 }
                 catch (Exception e)
@@ -1935,7 +1940,7 @@ namespace uPLibrary.Networking.M2Mqtt
                                     // [v3.1.1] SUBSCRIBE and UNSIBSCRIBE aren't "officially" QOS = 1
                                     case MqttMsgState.SendSubscribe:
                                     case MqttMsgState.SendUnsubscribe:
-
+                                        Debug.Log("Sending Subscribe or UnSubscribe");
                                         // QoS 1, PUBLISH or SUBSCRIBE/UNSUBSCRIBE message to send to broker, state change to wait PUBACK or SUBACK/UNSUBACK
                                         if (msgContext.Flow == MqttMsgFlow.ToPublish)
                                         {
