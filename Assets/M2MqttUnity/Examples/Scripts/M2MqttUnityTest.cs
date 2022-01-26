@@ -122,6 +122,7 @@ namespace M2MqttUnity.Examples
 
         protected override void SubscribeTopics()
         {
+            //JXL needed to have QOS at least once to work and TLS1.2
             client.Subscribe(new string[] { "/pp/ip/eu" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE });
         }
 

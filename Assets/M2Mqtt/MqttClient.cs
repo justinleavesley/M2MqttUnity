@@ -1470,6 +1470,7 @@ namespace uPLibrary.Networking.M2Mqtt
                             case MqttMsgBase.MQTT_MSG_PUBLISH_TYPE:
 
                                 MqttMsgPublish publish = MqttMsgPublish.Parse(fixedHeaderFirstByte[0], (byte)this.ProtocolVersion, this.channel);
+                                Debug.Log("Got MQTT_MSG_PUBLISH_TYPE topic=" + publish.Topic + " bytes=" + publish.Message.Length);
 #if TRACE
                                 MqttUtility.Trace.WriteLine(TraceLevel.Frame, "RECV {0}", publish);
 #endif
@@ -1598,7 +1599,7 @@ namespace uPLibrary.Networking.M2Mqtt
                     else
                     {
                         // wake up thread that will notify connection is closing
-                        //JXL Edit
+                        //JXL Edit shouldn't exit just because zero bytes read.
                         //this.OnConnectionClosing();
                     }
                 }
@@ -1940,7 +1941,7 @@ namespace uPLibrary.Networking.M2Mqtt
                                     // [v3.1.1] SUBSCRIBE and UNSIBSCRIBE aren't "officially" QOS = 1
                                     case MqttMsgState.SendSubscribe:
                                     case MqttMsgState.SendUnsubscribe:
-                                        Debug.Log("Sending Subscribe or UnSubscribe");
+                                        if (msgContext.State == MqttMsgState.SendSubscribe) Debug.Log("Sending subscribe message");
                                         // QoS 1, PUBLISH or SUBSCRIBE/UNSUBSCRIBE message to send to broker, state change to wait PUBACK or SUBACK/UNSUBACK
                                         if (msgContext.Flow == MqttMsgFlow.ToPublish)
                                         {

@@ -2293,6 +2293,7 @@ MonoBehaviour:
   mqttUserName: 
   mqttPassword: 
   clientCertFilepath: C:\Users\justi\openssl-1.0.2q-x64_86-win64\certfile.pfx
+  clientpfxPassword: password
   caCertFilepath: C:\Users\justi\openssl-1.0.2q-x64_86-win64\AmazonRootCA1.pem
   autoTest: 0
   consoleInputField: {fileID: 221991987}

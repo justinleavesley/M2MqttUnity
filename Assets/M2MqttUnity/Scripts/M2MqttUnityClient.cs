@@ -64,6 +64,7 @@ namespace M2MqttUnity
 
         [Tooltip("ClientCertificate_FilePath")]
         public string clientCertFilepath = "";
+        public string clientpfxPassword = "";
 
         [Tooltip("CACertificate_FilePath")]
         public string caCertFilepath = "";
@@ -290,7 +291,9 @@ namespace M2MqttUnity
                     client = new MqttClient(brokerAddress,brokerPort,isEncrypted, isEncrypted ? MqttSslProtocols.SSLv3 : MqttSslProtocols.None);
 #else
                     //client = new MqttClient(brokerAddress, brokerPort, isEncrypted, null, null, isEncrypted ? MqttSslProtocols.SSLv3 : MqttSslProtocols.None);
-                    X509Certificate2 clientCert = new X509Certificate2(clientCertFilepath, "password", X509KeyStorageFlags.PersistKeySet);
+                    
+                    //JXL need to use pfx file with password
+                    X509Certificate2 clientCert = new X509Certificate2(clientCertFilepath, clientpfxPassword, X509KeyStorageFlags.PersistKeySet);
                     //X509Certificate2 clientCert = new X509Certificate2(clientCertFilepath);
 
                     X509Certificate2 caCert = new X509Certificate2(caCertFilepath);
